@@ -3,8 +3,8 @@
 **Command:**
 ```python
 from bookshelf.models import Book
-book_to_delete = Book.objects.get(author="George Orwell")
-book_to_delete.delete()
+book = Book.objects.get(author="George Orwell")
+book.delete()
 Book.objects.all()
 ```
 
