@@ -1,0 +1,174 @@
+<!-- librarian_view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librarian Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #11998e;
+            font-size: 18px;
+        }
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .actions {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .actions h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #11998e;
+            padding-bottom: 10px;
+        }
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .btn-primary {
+            background-color: #11998e;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0d7a72;
+        }
+        .btn-secondary {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #da190b;
+        }
+        .user-info {
+            background-color: #e0f2f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .user-info strong {
+            color: #11998e;
+        }
+        .task-list {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .task-list ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .task-list li {
+            margin: 8px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📖 Librarian Dashboard</h1>
+        <p>Manage library operations and assist members</p>
+    </div>
+    
+    <div class="user-info">
+        <strong>Logged in as:</strong> {{ user.username }} ({{ role }})
+    </div>
+    
+    <div class="dashboard-grid">
+        <div class="card">
+            <h3>📚 Book Management</h3>
+            <p>Catalog new books, update book information, and manage book inventory in the library system.</p>
+        </div>
+        
+        <div class="card">
+            <h3>🔄 Circulation</h3>
+            <p>Handle book checkouts, returns, and renewals. Track due dates and manage reservations.</p>
+        </div>
+        
+        <div class="card">
+            <h3>👤 Member Services</h3>
+            <p>Assist library members with their inquiries, help them find books, and manage member accounts.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Daily Reports</h3>
+            <p>View circulation statistics, overdue books, and daily transaction reports.</p>
+        </div>
+    </div>
+    
+    <div class="actions">
+        <h2>Librarian Tools</h2>
+        <p>Quick access to common librarian tasks:</p>
+        <div class="action-buttons">
+            <a href="{% url 'list_books' %}" class="btn btn-primary">Browse Books</a>
+            <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+        </div>
+        
+        <div class="task-list">
+            <strong>Today's Tasks:</strong>
+            <ul>
+                <li>✅ Review new book arrivals</li>
+                <li>✅ Process book returns</li>
+                <li>⏳ Update book catalog</li>
+                <li>⏳ Assist members with inquiries</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
