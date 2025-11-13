@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
+from django.views.decorators.csrf import csrf_protect
+from advanced_features_and_security.LibraryProject.bookshelf.forms import ExampleForm
 from .models import Book
 
 @permission_required('myapp.can_view', raise_exception=True)
@@ -31,3 +33,19 @@ def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     book.delete()
     return redirect('book_list')
+
+@csrf_protect
+def example_form_view(request):
+    """
+    Displays and processes ExampleForm securely.
+    Uses CSRF protection and Django’s ORM for safe database operations.
+    """
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = ExampleForm()
+
+    return render(request, 'bookshelf/form_example.html', {'form': form})
