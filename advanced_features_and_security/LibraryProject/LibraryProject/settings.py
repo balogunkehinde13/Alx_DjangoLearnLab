@@ -23,9 +23,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+1yhn3(wzpkrc^^bd)fe4*rk@0@&!8420@4_qwn#mz)j4_ok6!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY SETTINGS
 
-ALLOWED_HOSTS = []
+# 1. Never keep DEBUG=True in production.
+DEBUG = False
+
+# 2. Define allowed hosts explicitly to prevent Host header attacks.
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', '127.0.0.1']
+
+# 3. Security headers (browser-side protections)
+SECURE_BROWSER_XSS_FILTER = True                 # Enables browser XSS filtering
+SECURE_CONTENT_TYPE_NOSNIFF = True               # Prevents MIME-type sniffing
+X_FRAME_OPTIONS = 'DENY'                         # Prevents clickjacking (disallow iframes)
+
+# 4. Use HTTPS-only cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# 5. Optional but recommended extras
+SECURE_HSTS_SECONDS = 31536000                   # Enforce HTTPS for 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# 6. Make sure SECRET_KEY is not hardcoded in production (use env variables!)
+import os
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'insecure-key-for-dev')
+
 
 
 # Application definition

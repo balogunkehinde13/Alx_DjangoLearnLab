@@ -1,8 +1,18 @@
-# Django Project
+# Permissions and Groups Setup
 
-A web application built with Django framework.
+## Custom Permissions
+Defined in `Article` model:
+- can_view: Allows viewing of articles
+- can_create: Allows creation of new articles
+- can_edit: Allows editing of existing articles
+- can_delete: Allows deletion of articles
 
-## Description
+## Groups
+- **Viewers** → can_view
+- **Editors** → can_create, can_edit
+- **Admins** → all permissions
 
-This is a Django-based web application 
+Run `python manage.py init_groups` to create groups and assign permissions automatically.
 
+## Enforcement
+Each view uses Django’s `@permission_required` decorator to restrict access.
