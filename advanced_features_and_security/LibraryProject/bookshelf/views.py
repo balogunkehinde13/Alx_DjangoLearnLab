@@ -3,6 +3,20 @@ from django.contrib.auth.decorators import permission_required
 from django.views.decorators.csrf import csrf_protect
 from advanced_features_and_security.LibraryProject.bookshelf.forms import ExampleForm
 from .models import Book
+from .forms import ExampleForm  # ✅ Make sure this line exists
+
+@csrf_protect
+def form_example(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # ✅ Cleaned data ensures safe handling of user input
+            cleaned_data = form.cleaned_data
+            # Process the data here safely (no raw SQL!)
+            return redirect("book_list")
+    else:
+        form = ExampleForm()
+    return render(request, "bookshelf/form_example.html", {"form": form})
 
 @permission_required('myapp.can_view', raise_exception=True)
 def book_list(request):
