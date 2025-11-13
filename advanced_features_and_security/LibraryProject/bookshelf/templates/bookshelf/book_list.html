@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+</head>
+<body>
+    <h1>All Books</h1>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} by {{ book.author }}</li>
+        {% empty %}
+            <li>No books yet!</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'form_example' %}">Add a New Book</a></p>
+</body>
+</html>
