@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'rest_framework' ,
     'api',
 ]
@@ -97,8 +98,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    }
 ]
+
+# This tells DRF how to handle authentication across your entire API
+REST_FRAMEWORK = {
+    # DEFAULT_AUTHENTICATION_CLASSES: How DRF verifies who the user is
+    # TokenAuthentication checks for a token in the request header
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # DEFAULT_PERMISSION_CLASSES: Who can access the API by default
+    # IsAuthenticated means users MUST be logged in to access any endpoint
+    # We'll override this per-view for more control
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 
 # Internationalization
