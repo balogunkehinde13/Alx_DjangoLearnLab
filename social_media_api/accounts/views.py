@@ -16,7 +16,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token, _ = Token.objects.get_or_create(user=user)
+            token = Token.objects.get(user=user)
             return Response(
                 {
                     'token': token.key,
@@ -34,8 +34,9 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user = serializer.validated_data['user']
+        user = serializer.validated_data
         token, _ = Token.objects.get_or_create(user=user)
+
 
         return Response(
             {
