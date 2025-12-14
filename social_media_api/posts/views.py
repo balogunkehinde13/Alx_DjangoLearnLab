@@ -6,6 +6,10 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
 
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 
 class StandardResultsSetPagination(PageNumberPagination):
     """
@@ -72,3 +76,22 @@ class CommentViewSet(viewsets.ModelViewSet):
             author=self.request.user,
             post=post
         )
+
+class FeedView(APIView):
+    """
+    Returns a feed of posts from users the current user follows.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Get users the current user follows
+        following_users = request.user.following.all()
+
+        # Get posts from followed users
+        posts = Post.objects.filter(
+            author__in=following_users
+        ).order_by('-created_at')
+
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
