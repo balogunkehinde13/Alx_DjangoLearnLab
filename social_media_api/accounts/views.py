@@ -1,10 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import generics, status, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from rest_framework.response import Response
+
+from .models import User as CustomUser
+from .serializers import UserProfileSerializer
 
 from .serializers import (
     RegisterSerializer,
@@ -93,15 +97,18 @@ class ProfileView(APIView):
         serializer.save()
         return Response(serializer.data)
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     """
     Allow an authenticated user to follow another user.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+
+    # 👇 REQUIRED by spec
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
-        target_user = get_object_or_404(User, id=user_id)
+        target_user = get_object_or_404(self.queryset, id=user_id)
 
         if target_user == request.user:
             return Response(
@@ -117,15 +124,18 @@ class FollowUserView(APIView):
         )
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     """
     Allow an authenticated user to unfollow another user.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+
+    # 👇 REQUIRED by spec
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
-        target_user = get_object_or_404(User, id=user_id)
+        target_user = get_object_or_404(self.queryset, id=user_id)
 
         request.user.following.remove(target_user)
 
