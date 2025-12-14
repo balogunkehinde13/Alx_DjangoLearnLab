@@ -158,3 +158,20 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==============================
+# Security settings (Production)
+# ==============================
+
+# Prevent the browser from trying to guess content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable the browser's XSS filtering
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent the site from being rendered inside a frame (clickjacking protection)
+X_FRAME_OPTIONS = 'DENY'
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
