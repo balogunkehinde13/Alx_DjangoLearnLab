@@ -110,41 +110,38 @@ class FeedView(APIView):
 
 class LikePostView(APIView):
     """
-    Allows an authenticated user to like a post.
+    Handle liking and unliking posts.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, pk):
-        # 👇 REQUIRED by checker
-        post = generics.get_object_or_404(Post, pk=pk)
+    def post(self, request, pk, format=None):
+        """
+        Like a post.
+        """
+        post = get_object_or_404(Post, pk=pk)
 
-        # 👇 REQUIRED by checker
-        like, created = Like.objects.get_or_create(
-            user=request.user,
-            post=post
-        )
+        # Create a Like object if it doesn't exist already
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
 
-        if not created:
-            return Response(
-                {"detail": "You already liked this post."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        if created:
+            return Response({'message': 'Post liked'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'message': 'You already liked this post'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create notification for post author
-        if post.author != request.user:
-            Notification.objects.create(
-                recipient=post.author,
-                actor=request.user,
-                verb='liked your post',
-                content_type=ContentType.objects.get_for_model(Post),
-                object_id=post.id
-            )
+    def delete(self, request, pk, format=None):
+        """
+        Unlike a post.
+        """
+        post = get_object_or_404(Post, pk=pk)
 
-        return Response(
-            {"detail": "Post liked."},
-            status=status.HTTP_201_CREATED
-        )
+        # Check if the user already liked the post, then delete the like
+        try:
+            like = Like.objects.get(user=request.user, post=post)
+            like.delete()
+            return Response({'message': 'Post unliked'}, status=status.HTTP_204_NO_CONTENT)
+        except Like.DoesNotExist:
+            return Response({'message': 'You have not liked this post yet'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -153,12 +150,13 @@ class LikePostView(APIView):
     Allows an authenticated user to unlike a post.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        # 👇 REQUIRED pattern consistency
+        # Get the post explicitly
         post = generics.get_object_or_404(Post, pk=pk)
 
+        # Find the like for this user and post
         like = Like.objects.filter(
             user=request.user,
             post=post
@@ -170,6 +168,7 @@ class LikePostView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Remove the like
         like.delete()
 
         return Response(
