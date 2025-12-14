@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-2f7*3w43d3h$k9wm!i)9wnpc8-ju7=s+jxwtcu56t^^)*xy!x3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['.onrender.com']
 
 
 # Application definition
@@ -106,9 +106,12 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')
+        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=True
     )
 }
+
 
 
 
