@@ -6,3 +6,4 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('profile/', ProfileView.as_view(), name='profile'),
 ]
+# 08e57dab93eeeab811be8f998bf78e06e694e837

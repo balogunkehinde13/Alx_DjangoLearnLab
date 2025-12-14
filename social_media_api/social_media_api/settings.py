@@ -41,20 +41,27 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'accounts',
+    'posts',
 ]
 
-# custom user model 
+# Tell Django to use our custom user model instead of the default one
 AUTH_USER_MODEL = 'accounts.User'
 
-
+# Django REST Framework global configuration
 REST_FRAMEWORK = {
+    # Use token-based authentication for all API requests
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    # Require authentication by default (can be overridden per-view)
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+# Media configuration (used for profile pictures)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 MIDDLEWARE = [
@@ -133,9 +140,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

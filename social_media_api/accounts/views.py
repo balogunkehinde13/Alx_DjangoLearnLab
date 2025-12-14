@@ -9,14 +9,28 @@ from .serializers import (
     UserProfileSerializer
 )
 
+"""
+Views handle:
+- HTTP requests
+- Calling serializers
+- Returning HTTP responses
+"""
+
+
 class RegisterView(APIView):
+    """
+    Registers a new user and returns an authentication token.
+    """
+
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
+
         if serializer.is_valid():
             user = serializer.save()
             token = Token.objects.get(user=user)
+
             return Response(
                 {
                     'token': token.key,
@@ -24,10 +38,15 @@ class RegisterView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
+    """
+    Authenticates a user and returns an existing token.
+    """
+
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
@@ -36,7 +55,6 @@ class LoginView(APIView):
 
         user = serializer.validated_data
         token, _ = Token.objects.get_or_create(user=user)
-
 
         return Response(
             {
@@ -47,6 +65,10 @@ class LoginView(APIView):
 
 
 class ProfileView(APIView):
+    """
+    Retrieve or update the authenticated user's profile.
+    """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
