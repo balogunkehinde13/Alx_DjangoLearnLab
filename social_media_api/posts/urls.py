@@ -5,9 +5,11 @@ from .views import PostViewSet, CommentViewSet, FeedView
 router = DefaultRouter()
 router.register(r'posts', PostViewSet, basename='post')
 
-urlpatterns = [
+urlpatterns += [
     path('', include(router.urls)),
     path('feed/', FeedView.as_view(), name='feed'),
+    path('posts/<int:pk>/like/', LikePostView.as_view(), name='like-post'),
+    path('posts/<int:pk>/unlike/', UnlikePostView.as_view(), name='unlike-post'),
     path(
         'posts/<int:post_id>/comments/',
         CommentViewSet.as_view({

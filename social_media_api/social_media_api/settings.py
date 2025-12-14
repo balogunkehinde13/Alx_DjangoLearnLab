@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'posts',
+    'notifications',
 ]
 
 # Tell Django to use our custom user model instead of the default one

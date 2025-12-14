@@ -103,8 +103,6 @@ class FollowUserView(generics.GenericAPIView):
     """
 
     permission_classes = [permissions.IsAuthenticated]
-
-    # 👇 REQUIRED by spec
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
@@ -116,7 +114,17 @@ class FollowUserView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Follow the user
         request.user.following.add(target_user)
+
+        # 🔔 CREATE NOTIFICATION HERE
+        Notification.objects.create(
+            recipient=target_user,
+            actor=request.user,
+            verb='started following you',
+            content_type=ContentType.objects.get_for_model(target_user),
+            object_id=target_user.id
+        )
 
         return Response(
             {"detail": f"You are now following {target_user.username}."},
