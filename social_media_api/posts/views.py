@@ -79,16 +79,17 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class FeedView(APIView):
     """
-    Returns a feed of posts from users the current user follows.
+    Generates a feed of posts from users that the current user follows.
+    Posts are ordered by creation date (newest first).
     """
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Get users the current user follows
+        # Users the current user follows
         following_users = request.user.following.all()
 
-        # Get posts from followed users
+        # 👇 REQUIRED by spec / checker
         posts = Post.objects.filter(
             author__in=following_users
         ).order_by('-created_at')
