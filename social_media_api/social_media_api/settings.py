@@ -14,6 +14,9 @@ from pathlib import Path
 import dj_database_url
 import os
 
+# Port configuration for deployment platforms (Render / Heroku)
+PORT = os.environ.get('PORT', '8000')
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-dev-key')
 
 
