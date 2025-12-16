@@ -6,6 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from django.contrib.contenttypes.models import ContentType
+
+from notifications.models import Notification
 
 from .models import User as CustomUser
 from .serializers import UserProfileSerializer
